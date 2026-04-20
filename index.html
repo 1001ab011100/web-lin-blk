@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIN Bulukumba — Portal Berita & Investigasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:   #0f0f0f;
+    --paper: #f7f3ec;
+    --warm:  #ede8df;
+    --red:   #c0392b;
+    --steel: #2c3e50;
+    --muted: #7f8c8d;
+    --rule:  #d5cfc4;
+    --white: #ffffff;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;}
+
+/* TOPBAR */
+.topbar{background:var(–ink);color:var(–paper);padding:8px 48px;display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;}
+.topbar-date{color:rgba(247,243,236,0.5);}
+.topbar-right{display:flex;gap:28px;}
+.topbar-right span{color:rgba(247,243,236,0.65);}
+.topbar-right span strong{color:var(–paper);}
+
+/* MASTHEAD */
+.masthead{background:var(–white);border-bottom:3px solid var(–ink);padding:28px 48px 20px;text-align:center;}
+.masthead-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(–muted);margin-bottom:10px;}
+.masthead-title{font-family:‘Bebas Neue’,sans-serif;font-size:clamp(52px,9vw,104px);line-height:0.9;letter-spacing:6px;color:var(–ink);}
+.masthead-title .red{color:var(–red);}
+.masthead-sub{font-family:‘Libre Baskerville’,serif;font-style:italic;font-size:14px;color:var(–muted);margin-top:10px;}
+
+/* NAV */
+nav.main-nav{background:var(–ink);padding:0 48px;display:flex;align-items:center;position:sticky;top:0;z-index:200;overflow-x:auto;}
+nav.main-nav a{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:rgba(247,243,236,0.65);text-decoration:none;padding:14px 18px;border-bottom:3px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;}
+nav.main-nav a:hover,nav.main-nav a.active{color:var(–white);border-bottom-color:var(–red);}
+.nav-spacer{flex:1;}
+.nav-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:6px 14px;}
+.nav-search input{background:transparent;border:none;outline:none;color:var(–white);font-size:12px;width:130px;font-family:‘DM Sans’,sans-serif;}
+.nav-search input::placeholder{color:rgba(255,255,255,0.3);}
+
+/* BREAKING */
+.breaking{background:var(–red);display:flex;align-items:center;overflow:hidden;}
+.breaking-label{background:var(–ink);color:var(–white);font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:3px;padding:10px 20px;white-space:nowrap;flex-shrink:0;}
+.breaking-track{flex:1;overflow:hidden;}
+.breaking-inner{display:flex;gap:80px;animation:ticker 32s linear infinite;white-space:nowrap;padding:10px 0;}
+.breaking-inner span{font-size:13px;color:var(–white);}
+.breaking-inner span::before{content:’◆ ’;font-size:8px;opacity:.6;}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* LAYOUT */
+.main-layout{display:grid;grid-template-columns:1fr 320px;gap:48px;padding:48px;max-width:1260px;margin:0 auto;}
+
+/* HERO STORY */
+.hero-story{background:var(–white);border-top:4px solid var(–ink);padding:32px;margin-bottom:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;}
+.story-img{aspect-ratio:4/3;background:linear-gradient(135deg,#1a1a2e 0%,#2c3e50 60%,#1a1a2e 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.story-img::after{content:‘LIN BULUKUMBA’;font-family:‘Bebas Neue’,sans-serif;font-size:22px;letter-spacing:6px;color:rgba(255,255,255,0.1);}
+.img-cap{font-size:11px;color:var(–muted);margin-top:7px;font-style:italic;}
+.story-cat{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(–red);font-weight:500;margin-bottom:12px;}
+.story-hl{font-family:‘Libre Baskerville’,serif;font-size:clamp(20px,2.2vw,30px);font-weight:700;line-height:1.25;color:var(–ink);margin-bottom:14px;cursor:pointer;transition:color .2s;}
+.story-hl:hover{color:var(–red);}
+.story-deck{font-size:15px;line-height:1.75;color:#444;margin-bottom:18px;}
+.story-meta{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(–muted);display:flex;gap:14px;}
+.story-meta .auth{color:var(–ink);font-weight:500;}
+.btn-read{display:inline-block;margin-top:18px;background:var(–ink);color:var(–white);font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;text-decoration:none;padding:11px 26px;border:2px solid var(–ink);cursor:pointer;transition:background .2s,color .2s;}
+.btn-read:hover{background:transparent;color:var(–ink);}
+
+/* SECTION RULE */
+.sec-rule{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.sec-rule h2{font-family:‘Bebas Neue’,sans-serif;font-size:26px;letter-spacing:3px;color:var(–ink);white-space:nowrap;}
+.rule-line{flex:1;height:2px;background:linear-gradient(90deg,var(–ink),var(–rule));}
+.rule-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(–white);background:var(–red);padding:4px 10px;}
+
+/* NEWS GRID */
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;}
+.news-card{background:var(–white);border-top:3px solid var(–rule);padding:18px;cursor:pointer;transition:border-color .2s,transform .2s;}
+.news-card:hover{border-color:var(–red);transform:translateY(-3px);}
+.card-img{aspect-ratio:16/9;background:linear-gradient(135deg,var(–warm),var(–rule));margin-bottom:13px;position:relative;overflow:hidden;}
+.card-img-lbl{position:absolute;bottom:7px;left:7px;font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:2px;background:rgba(15,15,15,.8);color:var(–white);padding:3px 8px;}
+.news-card .cat{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(–red);font-weight:500;margin-bottom:7px;}
+.news-card h3{font-family:‘Libre Baskerville’,serif;font-size:15px;font-weight:700;line-height:1.35;color:var(–ink);margin-bottom:9px;}
+.news-card p{font-size:13px;line-height:1.65;color:#555;margin-bottom:12px;}
+.card-meta{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(–muted);border-top:1px solid var(–rule);padding-top:9px;display:flex;justify-content:space-between;}
+
+/* NEWS LIST */
+.news-list{margin-bottom:48px;}
+.news-li{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(–rule);cursor:pointer;transition:background .15s;}
+.news-li:hover{background:rgba(192,57,43,.03);}
+.li-thumb{aspect-ratio:1;background:linear-gradient(135deg,var(–steel),#4a6275);position:relative;overflow:hidden;}
+.li-thumb::after{content:attr(data-n);font-family:‘Bebas Neue’,sans-serif;font-size:28px;color:rgba(255,255,255,.15);position:absolute;bottom:3px;right:6px;}
+.li-cat{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(–red);margin-bottom:5px;}
+.li-title{font-family:‘Libre Baskerville’,serif;font-size:14px;font-weight:700;line-height:1.4;color:var(–ink);margin-bottom:5px;}
+.li-date{font-size:11px;color:var(–muted);letter-spacing:1px;}
+
+/* SIDEBAR */
+.sidebar-widget{background:var(–white);border-top:3px solid var(–ink);padding:22px;margin-bottom:28px;}
+.wgt-title{font-family:‘Bebas Neue’,sans-serif;font-size:20px;letter-spacing:3px;color:var(–ink);margin-bottom:18px;border-bottom:1px solid var(–rule);padding-bottom:9px;}
+
+.org-center{text-align:center;padding-bottom:4px;}
+.org-emblem{width:64px;height:64px;margin:0 auto 14px;background:linear-gradient(135deg,var(–ink),var(–steel));clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.org-name{font-family:‘Libre Baskerville’,serif;font-size:15px;font-weight:700;line-height:1.3;margin-bottom:5px;}
+.org-loc{font-size:12px;color:var(–muted);margin-bottom:14px;}
+.org-desc{font-size:12px;line-height:1.7;color:#555;text-align:left;border-top:1px solid var(–rule);padding-top:12px;}
+.org-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.stat-b{background:var(–warm);padding:10px 6px;text-align:center;}
+.s-num{font-family:‘Bebas Neue’,sans-serif;font-size:24px;color:var(–red);display:block;line-height:1;}
+.s-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);display:block;margin-top:3px;}
+
+.p-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(–rule);}
+.p-item:last-child{border-bottom:none;}
+.p-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(–steel),#4a6275);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:‘Bebas Neue’,sans-serif;font-size:15px;color:rgba(255,255,255,.8);}
+.p-role{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(–red);}
+.p-name{font-size:13px;font-weight:500;color:var(–ink);line-height:1.3;}
+
+.tag-cloud{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{font-size:11px;letter-spacing:.5px;padding:5px 10px;border:1px solid var(–rule);color:var(–muted);cursor:pointer;transition:background .2s,color .2s,border-color .2s;}
+.tag:hover{background:var(–ink);color:var(–white);border-color:var(–ink);}
+
+.ct-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:12px;line-height:1.6;}
+.ct-icon{color:var(–red);flex-shrink:0;font-size:14px;}
+
+/* FOOTER */
+footer{background:var(–ink);color:rgba(247,243,236,.6);padding:56px 48px 28px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;max-width:1260px;margin:0 auto 44px;}
+.fb-title{font-family:‘Bebas Neue’,sans-serif;font-size:34px;letter-spacing:4px;color:var(–white);line-height:1;margin-bottom:5px;}
+.fb-sub{font-size:10px;letter-spacing:2px;color:rgba(247,243,236,.35);text-transform:uppercase;margin-bottom:14px;}
+.footer-grid .fc h4{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(–white);margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:8px;}
+.footer-grid .fc ul{list-style:none;}
+.footer-grid .fc ul li{padding:5px 0;font-size:12px;}
+.footer-grid .fc ul li a{color:rgba(247,243,236,.5);text-decoration:none;transition:color .2s;}
+.footer-grid .fc ul li a:hover{color:var(–white);}
+.footer-btm{border-top:1px solid rgba(255,255,255,.08);padding-top:22px;max-width:1260px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;letter-spacing:1px;}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,15,15,.85);backdrop-filter:blur(4px);overflow-y:auto;}
+.modal-ov.open{display:flex;align-items:flex-start;justify-content:center;padding:60px 24px;}
+.modal-box{background:var(–white);max-width:720px;width:100%;padding:48px;position:relative;animation:sli .3s ease;}
+@keyframes sli{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-x{position:absolute;top:14px;right:18px;font-size:28px;cursor:pointer;color:var(–muted);background:none;border:none;line-height:1;}
+.modal-x:hover{color:var(–red);}
+.modal-cat{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(–red);margin-bottom:10px;}
+.modal-title{font-family:‘Libre Baskerville’,serif;font-size:26px;font-weight:700;line-height:1.25;color:var(–ink);margin-bottom:14px;}
+.modal-meta{font-size:12px;color:var(–muted);letter-spacing:1px;border-top:1px solid var(–rule);border-bottom:1px solid var(–rule);padding:9px 0;margin-bottom:22px;display:flex;gap:18px;}
+.modal-body{font-family:‘Libre Baskerville’,serif;font-size:16px;line-height:1.9;color:#333;}
+.modal-body p{margin-bottom:18px;}
+
+/* ADMIN */
+.admin-btn{position:fixed;bottom:30px;right:30px;z-index:500;background:var(–red);color:var(–white);border:none;cursor:pointer;width:52px;height:52px;font-family:‘Bebas Neue’,sans-serif;font-size:26px;box-shadow:0 4px 20px rgba(192,57,43,.4);transition:background .2s;}
+.admin-btn:hover{background:#a93226;}
+.admin-panel{display:none;position:fixed;bottom:94px;right:30px;z-index:500;background:var(–white);border-top:3px solid var(–red);box-shadow:0 8px 40px rgba(0,0,0,.18);width:370px;padding:26px;animation:sli .25s ease;}
+.admin-panel.open{display:block;}
+.admin-panel h3{font-family:‘Bebas Neue’,sans-serif;font-size:20px;letter-spacing:2px;color:var(–ink);margin-bottom:18px;}
+.fg{margin-bottom:12px;}
+.fg label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(–muted);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;border:1px solid var(–rule);padding:9px 11px;font-family:‘DM Sans’,sans-serif;font-size:13px;background:var(–paper);color:var(–ink);outline:none;transition:border-color .2s;resize:vertical;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(–ink);}
+.btn-pub{width:100%;background:var(–ink);color:var(–white);border:none;cursor:pointer;font-family:‘Bebas Neue’,sans-serif;font-size:17px;letter-spacing:3px;padding:13px;margin-top:4px;transition:background .2s;}
+.btn-pub:hover{background:var(–red);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+.topbar,.masthead,nav.main-nav,footer{padding-left:20px;padding-right:20px;}
+.main-layout{grid-template-columns:1fr;padding:24px 20px;}
+.hero-story{grid-template-columns:1fr;}
+.news-grid{grid-template-columns:1fr 1fr;}
+.footer-grid{grid-template-columns:1fr 1fr;gap:28px;}
+.admin-panel{width:calc(100vw - 40px);right:20px;}
+}
+@media(max-width:600px){
+.masthead-title{font-size:48px;}
+.news-grid{grid-template-columns:1fr;}
+.footer-grid{grid-template-columns:1fr;}
+.topbar-right{display:none;}
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+  <span class="topbar-date" id="dateDisp"></span>
+  <div class="topbar-right">
+    <span><strong>Bulukumba</strong> · Sulawesi Selatan</span>
+    <span><strong>LIN</strong> · Lembaga Investigasi Negara</span>
+    <span><strong>Masa Bakti</strong> 2026–2029</span>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+
+<div class="masthead">
+  <div class="masthead-eyebrow">Dewan Pimpinan Cabang Kabupaten Bulukumba</div>
+  <div class="masthead-title">LIN <span class="red">·</span> INVESTIGASI</div>
+  <div class="masthead-sub">Portal Berita & Investigasi — Lembaga Investigasi Negara</div>
+</div>
+
+<!-- NAV -->
+
+<nav class="main-nav">
+  <a href="#beranda" class="active">Beranda</a>
+  <a href="#investigasi">Investigasi</a>
+  <a href="#hukum-ham">Hukum & HAM</a>
+  <a href="#ekonomi">Ekonomi</a>
+  <a href="#lingkungan">Lingkungan</a>
+  <a href="#profil">Profil</a>
+  <div class="nav-spacer"></div>
+  <div class="nav-search">
+    <span style="color:rgba(255,255,255,.4);font-size:15px;">⌕</span>
+    <input type="text" id="searchInput" placeholder="Cari berita..." oninput="filterNews()">
+  </div>
+</nav>
+
+<!-- BREAKING -->
+
+<div class="breaking">
+  <div class="breaking-label">TERKINI</div>
+  <div class="breaking-track">
+    <div class="breaking-inner">
+      <span>LIN DPC Bulukumba resmi dilantik masa bakti 2026–2029</span>
+      <span>Divisi Investigasi siap kawal kasus pencemaran lingkungan di Kajang</span>
+      <span>Ketua DPC: Kami hadir untuk masyarakat Bulukumba yang butuh keadilan</span>
+      <span>Divisi Hukum &amp; HAM buka konsultasi gratis setiap hari Senin</span>
+      <span>LIN Bulukumba koordinasi dengan Polres terkait pengawasan aparatur</span>
+      <span>LIN DPC Bulukumba resmi dilantik masa bakti 2026–2029</span>
+      <span>Divisi Investigasi siap kawal kasus pencemaran lingkungan di Kajang</span>
+      <span>Ketua DPC: Kami hadir untuk masyarakat Bulukumba yang butuh keadilan</span>
+      <span>Divisi Hukum &amp; HAM buka konsultasi gratis setiap hari Senin</span>
+      <span>LIN Bulukumba koordinasi dengan Polres terkait pengawasan aparatur</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+
+<div class="main-layout" id="beranda">
+  <main>
+
+```
+<!-- HERO -->
+<div class="hero-story reveal" id="heroStory">
+  <div>
+    <div class="story-img"></div>
+    <div class="img-cap">Kantor DPC LIN Kabupaten Bulukumba, Kecamatan Kajang</div>
+  </div>
+  <div>
+    <div class="story-cat" id="heroCat">Laporan Utama</div>
+    <div class="story-hl" id="heroHL" onclick="openArt(0)">LIN DPC Bulukumba Resmi Dilantik: Siap Kawal Keadilan dan Transparansi di Kabupaten Bulukumba</div>
+    <div class="story-deck" id="heroDeck">Dewan Pimpinan Cabang Lembaga Investigasi Negara Kabupaten Bulukumba secara resmi telah dibentuk dengan susunan pengurus lengkap yang siap bergerak di empat divisi strategis untuk masa bakti 2026 hingga 2029.</div>
+    <div class="story-meta"><span class="auth" id="heroAuth">Redaksi LIN</span><span>|</span><span id="heroDate">25 Maret 2026</span></div>
+    <button class="btn-read" onclick="openArt(0)">Baca Selengkapnya</button>
+  </div>
+</div>
+
+<!-- BERITA TERKINI -->
+<div id="investigasi">
+  <div class="sec-rule reveal">
+    <h2>Berita Terkini</h2>
+    <div class="rule-line"></div>
+    <div class="rule-tag">Live</div>
+  </div>
+</div>
+<div class="news-grid" id="newsGrid"></div>
+
+<!-- SOROTAN -->
+<div id="hukum-ham">
+  <div class="sec-rule reveal">
+    <h2>Sorotan Investigasi</h2>
+    <div class="rule-line"></div>
+  </div>
+</div>
+<div class="news-list" id="newsList"></div>
+
+<!-- EMPTY STATE -->
+<div id="emptyState" style="display:none;text-align:center;padding:60px 20px;color:var(--muted);">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;margin-bottom:10px;">Tidak ditemukan</div>
+  <div style="font-size:14px;">Coba kata kunci yang berbeda.</div>
+</div>
+```
+
+  </main>
+
+  <!-- SIDEBAR -->
+
+  <aside>
+
+```
+<!-- Profil -->
+<div class="sidebar-widget reveal" id="profil">
+  <div class="wgt-title">Profil Organisasi</div>
+  <div class="org-center">
+    <div class="org-emblem"></div>
+    <div class="org-name">Lembaga Investigasi Negara</div>
+    <div class="org-loc">DPC Kabupaten Bulukumba · Sulsel</div>
+    <div class="org-desc">Organisasi kemasyarakatan independen yang bergerak di bidang investigasi, pemantauan hukum, HAM, dan ketahanan ekonomi demi terwujudnya masyarakat yang adil dan transparan.</div>
+    <div class="org-stats">
+      <div class="stat-b"><span class="s-num">4</span><span class="s-lbl">Divisi</span></div>
+      <div class="stat-b"><span class="s-num">29+</span><span class="s-lbl">Pengurus</span></div>
+      <div class="stat-b"><span class="s-num">'26</span><span class="s-lbl">Berdiri</span></div>
+      <div class="stat-b"><span class="s-num">'29</span><span class="s-lbl">Masa Bakti</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Pengurus -->
+<div class="sidebar-widget reveal">
+  <div class="wgt-title">Pengurus Inti</div>
+  <div class="p-item"><div class="p-av">S</div><div><div class="p-role">Penasehat</div><div class="p-name">Sainal, S.Pd.I., MM. Dg Barani</div></div></div>
+  <div class="p-item"><div class="p-av">F</div><div><div class="p-role">Ketua</div><div class="p-name">Fahsar Budiman Kr. Naik</div></div></div>
+  <div class="p-item"><div class="p-av">H</div><div><div class="p-role">Sekretaris</div><div class="p-name">Haryanto, S.Sos</div></div></div>
+  <div class="p-item"><div class="p-av">R</div><div><div class="p-role">Bendahara</div><div class="p-name">Ratna Astutiningsi, S.Pd.I</div></div></div>
+</div>
+
+<!-- Topik -->
+<div class="sidebar-widget reveal">
+  <div class="wgt-title">Topik</div>
+  <div class="tag-cloud">
+    <span class="tag" onclick="filterByTag('Investigasi')">🔍 Investigasi</span>
+    <span class="tag" onclick="filterByTag('Hukum')">⚖️ Hukum & HAM</span>
+    <span class="tag" onclick="filterByTag('Ekonomi')">📊 Ekonomi</span>
+    <span class="tag" onclick="filterByTag('Lingkungan')">🌿 Lingkungan</span>
+    <span class="tag" onclick="filterByTag('Narkoba')">🚔 Narkoba</span>
+    <span class="tag" onclick="filterByTag('Cyber')">💻 Cyber</span>
+    <span class="tag" onclick="filterByTag('HUMAS')">📡 HUMAS</span>
+    <span class="tag" onclick="filterByTag('')">↺ Semua</span>
+  </div>
+</div>
+
+<!-- Kontak -->
+<div class="sidebar-widget reveal">
+  <div class="wgt-title">Kontak</div>
+  <div class="ct-row"><span class="ct-icon">📍</span><span style="font-size:12px;color:#555;line-height:1.65;">Jl. Pammolongan Poros Tanete–Kassi, Desa Lembang, Kec. Kajang, Kab. Bulukumba</span></div>
+  <div class="ct-row"><span class="ct-icon">✉</span><span style="font-size:12px;color:#555;">dpplinpusat@gmail.com</span></div>
+  <div class="ct-row"><span class="ct-icon">📞</span><span style="font-size:12px;color:#555;">082365099637 · 081232039905</span></div>
+</div>
+```
+
+  </aside>
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="fb-title">LIN Bulukumba</div>
+      <div class="fb-sub">Lembaga Investigasi Negara — DPC Kab. Bulukumba</div>
+      <p style="font-size:13px;line-height:1.8;">Hadir sebagai wadah pengawasan independen untuk masyarakat Bulukumba. Bergerak di bidang investigasi, hukum, HAM, dan ketahanan ekonomi demi keadilan yang nyata.</p>
+    </div>
+    <div class="fc">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#investigasi">Investigasi</a></li>
+        <li><a href="#hukum-ham">Hukum & HAM</a></li>
+        <li><a href="#ekonomi">Ekonomi</a></li>
+        <li><a href="#profil">Profil</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Divisi</h4>
+      <ul>
+        <li><a href="#">Hukum & HAM</a></li>
+        <li><a href="#">HUMAS & Lembaga</a></li>
+        <li><a href="#">Ketahanan Ekonomi</a></li>
+        <li><a href="#">Investigasi</a></li>
+      </ul>
+    </div>
+    <div class="fc">
+      <h4>Kontak DPP Pusat</h4>
+      <ul>
+        <li><a href="mailto:dpplinpusat@gmail.com">dpplinpusat@gmail.com</a></li>
+        <li><a href="tel:082365099637">082365099637</a></li>
+        <li><a href="tel:081232039905">081232039905</a></li>
+        <li style="font-size:12px;color:rgba(247,243,236,.4);">Kab. Tangerang, Banten</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-btm">
+    <span>© 2026 Lembaga Investigasi Negara — DPC Kabupaten Bulukumba</span>
+    <span style="opacity:.4;">Ketua: Fahsar Budiman Kr. Naik · Masa Bakti 2026–2029</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+
+<div class="modal-ov" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-x" id="modalX">×</button>
+    <div class="modal-cat" id="mCat"></div>
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-meta" id="mMeta"></div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+
+<button class="admin-btn" onclick="toggleAdmin()" title="Tulis Berita">+</button>
+
+<div class="admin-panel" id="adminPanel">
+  <h3>✏ Tulis Berita Baru</h3>
+  <div class="fg"><label>Judul Berita</label><input type="text" id="iJudul" placeholder="Masukkan judul..."></div>
+  <div class="fg"><label>Kategori</label>
+    <select id="iKat">
+      <option>Investigasi</option><option>Hukum & HAM</option><option>Ekonomi</option>
+      <option>Lingkungan</option><option>HUMAS</option><option>Narkoba</option>
+      <option>Cyber</option><option>Umum</option><option>Laporan Utama</option>
+    </select>
+  </div>
+  <div class="fg"><label>Ringkasan</label><textarea id="iDeck" rows="2" placeholder="1–2 kalimat ringkasan..."></textarea></div>
+  <div class="fg"><label>Isi Berita (pisah paragraf dengan baris kosong)</label><textarea id="iBody" rows="5" placeholder="Tulis isi berita di sini..."></textarea></div>
+  <div class="fg"><label>Penulis</label><input type="text" id="iAuth" value="Redaksi LIN"></div>
+  <button class="btn-pub" onclick="publishBerita()">PUBLIKASIKAN</button>
+</div>
+
+<script>
+// ─── DATA ───
+let articles = [
+  {
+    cat:'Laporan Utama',
+    title:'LIN DPC Bulukumba Resmi Dilantik: Siap Kawal Keadilan dan Transparansi di Kabupaten Bulukumba',
+    deck:'DPC Lembaga Investigasi Negara Kabupaten Bulukumba secara resmi telah dibentuk dengan susunan pengurus lengkap yang siap bergerak di empat divisi strategis untuk masa bakti 2026 hingga 2029.',
+    body:'<p>Lembaga Investigasi Negara (LIN) Dewan Pimpinan Cabang Kabupaten Bulukumba secara resmi ditetapkan pada 25 Maret 2026. Penetapan ini ditandatangani oleh Ketua Umum DPP LIN Robi Irawan Wiratmoko dan Sekretaris Jenderal Drs. Antoni Pane, MM di Tangerang.</p><p>Dengan terbentuknya DPC Bulukumba, LIN kini hadir secara resmi di Kabupaten Bulukumba Provinsi Sulawesi Selatan. Organisasi ini bergerak melalui empat divisi utama: Divisi Hukum & HAM, Divisi HUMAS & Antar Lembaga, Divisi Ketahanan Ekonomi, dan Divisi Investigasi.</p><p>Ketua DPC Fahsar Budiman Kr. Naik menyatakan kesiapan penuh organisasi dalam menjalankan fungsi pengawasan, investigasi, dan advokasi masyarakat. "Kami hadir untuk masyarakat Bulukumba yang membutuhkan keadilan dan transparansi," ujarnya.</p>',
+    author:'Redaksi LIN', date:'25 Maret 2026'
+  },
+  {
+    cat:'Investigasi',
+    title:'Divisi Investigasi LIN Soroti Dugaan Pencemaran Lingkungan di Wilayah Kajang',
+    deck:'Tim investigasi LIN turun langsung ke lapangan untuk mengumpulkan data terkait laporan pencemaran yang diterima dari warga sekitar kawasan industri.',
+    body:'<p>Divisi Investigasi DPC LIN Bulukumba yang dipimpin oleh Abdul Rahman Razak, SH mulai bergerak mengumpulkan fakta terkait dugaan pencemaran lingkungan yang dilaporkan warga di wilayah Kecamatan Kajang.</p><p>Andri Gunawan selaku penanggung jawab bidang Investigasi Pencemaran Lingkungan menyatakan timnya telah melakukan observasi awal dan akan segera menyampaikan laporan resmi kepada instansi berwenang jika ditemukan pelanggaran nyata.</p><p>"Kami tidak akan diam jika ada pihak yang merusak lingkungan dan merugikan masyarakat," tegas Andri.</p>',
+    author:'Andri Gunawan', date:'1 April 2026'
+  },
+  {
+    cat:'Hukum & HAM',
+    title:'Divisi Hukum LIN Buka Pos Konsultasi Gratis bagi Warga Bulukumba',
+    deck:'Sutarman, SH selaku Kepala Divisi Hukum & HAM mengumumkan layanan konsultasi hukum gratis setiap hari Senin di kantor DPC Bulukumba.',
+    body:'<p>Sebagai wujud komitmen terhadap akses keadilan, Divisi Hukum dan HAM DPC LIN Bulukumba membuka layanan konsultasi hukum gratis bagi seluruh warga Kabupaten Bulukumba mulai April 2026.</p><p>Kepala Divisi Sutarman, SH menegaskan bahwa layanan ini hadir untuk memberikan pemahaman hukum dasar, terutama bagi masyarakat yang tidak mampu mengakses layanan hukum berbayar. Konsultasi dilayani setiap hari Senin pukul 09.00–12.00 WITA di Kantor DPC, Jl. Pammolongan Poros Tanete–Kassi, Kecamatan Kajang.</p>',
+    author:'Sutarman, SH', date:'3 April 2026'
+  },
+  {
+    cat:'Ekonomi',
+    title:'LIN Pantau Implementasi Program UMKM di Bulukumba, Temukan Sejumlah Catatan',
+    deck:'Divisi Ketahanan Ekonomi melakukan pemantauan lapangan terhadap program pemberdayaan UMKM dan koperasi di beberapa kecamatan.',
+    body:'<p>Divisi Ketahanan Ekonomi DPC LIN Bulukumba yang dipimpin Asnawi Rizal, S.IP melakukan kunjungan lapangan ke sejumlah kelompok UMKM dan koperasi di Kabupaten Bulukumba.</p><p>Alimuddin selaku koordinator bidang UMK, UMKM dan Koperasi menyampaikan bahwa dari hasil kunjungan, terdapat beberapa catatan terkait distribusi modal dan pendampingan yang dinilai belum merata. Temuan ini akan dilaporkan secara resmi kepada dinas terkait.</p>',
+    author:'Asnawi Rizal, S.IP', date:'5 April 2026'
+  },
+  {
+    cat:'Narkoba',
+    title:'LIN Berikan Data Lapangan ke BNN Terkait Peredaran Narkoba di Bulukumba',
+    deck:'Andi Alif Hamsyin dari Divisi Investigasi menyerahkan data awal kepada BNN Kabupaten Bulukumba sebagai bentuk sinergi pemberantasan narkoba.',
+    body:'<p>LIN DPC Bulukumba menunjukkan komitmennya dalam mendukung pemberantasan narkoba dengan menyerahkan data lapangan kepada BNN Kabupaten Bulukumba. Data tersebut dikumpulkan oleh tim investigasi narkoba yang dikoordinatori Andi Alif Hamsyin.</p><p>"Kami tidak bekerja sendiri. Sinergi dengan aparat adalah kunci," ujar Andi. Penyerahan data ini merupakan bagian dari nota kerjasama antara LIN dan instansi penegak hukum di Bulukumba.</p>',
+    author:'Andi Alif Hamsyin', date:'7 April 2026'
+  },
+  {
+    cat:'Cyber',
+    title:'Waspadai Penipuan Digital: Divisi Investigasi Cyber LIN Terima 12 Aduan Warga',
+    deck:'Wiwin, S.IP dari Divisi Investigasi Cyber mencatat peningkatan aduan penipuan online dari warga Bulukumba dalam sepekan terakhir.',
+    body:'<p>Sejak dibuka secara resmi, Divisi Investigasi Cyber LIN DPC Bulukumba telah menerima 12 aduan dari warga terkait kasus penipuan berbasis digital, termasuk modus investasi bodong dan phishing akun media sosial.</p><p>Wiwin, S.IP selaku koordinator menyatakan pihaknya siap mendampingi pelapor dan membantu proses penerusan ke Siber Bareskrim jika memenuhi unsur pidana. "Masyarakat jangan ragu melapor. Kami ada untuk membantu," katanya.</p>',
+    author:'Wiwin, S.IP', date:'10 April 2026'
+  }
+];
+
+let filtered = null;
+
+// ─── RENDER ───
+function render(list) {
+  const src = list || articles;
+  const grid = document.getElementById('newsGrid');
+  const lst  = document.getElementById('newsList');
+  const hero = document.getElementById('heroStory');
+  const empty = document.getElementById('emptyState');
+
+  if (src.length === 0) {
+    grid.innerHTML = ''; lst.innerHTML = '';
+    hero.style.display = 'none'; empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none'; hero.style.display = '';
+
+  // Update hero
+  const h = src[0];
+  const hidx = articles.indexOf(h);
+  document.getElementById('heroCat').textContent  = h.cat;
+  document.getElementById('heroHL').textContent   = h.title;
+  document.getElementById('heroHL').onclick       = () => openArt(hidx);
+  document.getElementById('heroDeck').textContent = h.deck;
+  document.getElementById('heroAuth').textContent = h.author;
+  document.getElementById('heroDate').textContent = h.date;
+  document.querySelector('.btn-read').onclick      = () => openArt(hidx);
+
+  // Grid (next 3)
+  grid.innerHTML = '';
+  src.slice(1, 4).forEach(a => {
+    const i = articles.indexOf(a);
+    grid.innerHTML += `<div class="news-card reveal" onclick="openArt(${i})">
+      <div class="card-img"><div class="card-img-lbl">${a.cat}</div></div>
+      <div class="cat">${a.cat}</div>
+      <h3>${a.title}</h3>
+      <p>${a.deck}</p>
+      <div class="card-meta"><span>${a.author}</span><span>${a.date}</span></div>
+    </div>`;
+  });
+
+  // List (rest)
+  lst.innerHTML = '';
+  src.slice(4).forEach((a, n) => {
+    const i = articles.indexOf(a);
+    lst.innerHTML += `<div class="news-li reveal" onclick="openArt(${i})">
+      <div class="li-thumb" data-n="${n+5}"></div>
+      <div><div class="li-cat">${a.cat}</div><div class="li-title">${a.title}</div><div class="li-date">${a.author} · ${a.date}</div></div>
+    </div>`;
+  });
+
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el));
+}
+
+// ─── FILTER ───
+function filterNews() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  filtered = q ? articles.filter(a =>
+    a.title.toLowerCase().includes(q) ||
+    a.deck.toLowerCase().includes(q) ||
+    a.cat.toLowerCase().includes(q)
+  ) : null;
+  render(filtered);
+}
+
+function filterByTag(tag) {
+  document.getElementById('searchInput').value = tag;
+  filterNews();
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+// ─── MODAL ───
+function openArt(idx) {
+  const a = articles[idx];
+  document.getElementById('mCat').textContent   = a.cat;
+  document.getElementById('mTitle').textContent = a.title;
+  document.getElementById('mMeta').innerHTML    = `<span>${a.author}</span><span>${a.date}</span>`;
+  document.getElementById('mBody').innerHTML    = a.body;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+document.getElementById('modalX').addEventListener('click', () => {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+// ─── ADMIN ───
+function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('open'); }
+
+function publishBerita() {
+  const judul = document.getElementById('iJudul').value.trim();
+  const kat   = document.getElementById('iKat').value;
+  const deck  = document.getElementById('iDeck').value.trim();
+  const isi   = document.getElementById('iBody').value.trim();
+  const auth  = document.getElementById('iAuth').value.trim() || 'Redaksi LIN';
+
+  if (!judul || !deck || !isi) { alert('Mohon lengkapi judul, ringkasan, dan isi berita.'); return; }
+
+  const today = new Date().toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'});
+  const body  = isi.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+
+  articles.unshift({ cat:kat, title:judul, deck, body, author:auth, date:today });
+
+  ['iJudul','iDeck','iBody'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('adminPanel').classList.remove('open');
+  filtered = null;
+  render(null);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── DATE ───
+const dn = new Date();
+document.getElementById('dateDisp').textContent =
+  dn.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// ─── REVEAL ───
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*65); });
+}, { threshold:.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+render(null);
+</script>
+
+</body>
+</html>
